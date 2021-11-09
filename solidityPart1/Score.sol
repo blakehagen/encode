@@ -18,8 +18,6 @@ contract Score {
 
     event Score_set(uint indexed);
 
-    mapping(address => uint) score_list;
-
     function getScore() public view returns (uint) {
         return score;
     }
@@ -29,7 +27,14 @@ contract Score {
         emit Score_set(score);
     }
 
-    function getUserScore(address user) public view returns (uint) {
-        return score_list[user];
+    // // // //
+    mapping(address => uint) score_list;
+
+    function getUserScore(address _addr) public view returns (uint) {
+        return score_list[_addr];
+    }
+
+    function setUserScore(address _addr, uint _i) public {
+        score_list[_addr] = _i;
     }
 }

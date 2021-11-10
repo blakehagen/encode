@@ -15,11 +15,11 @@ NOT SO INTERESTED IN MONEY, NOW CONSIDERING RETURNING SOME TOKENS OR JUST LEAVIN
 
 // // // //
 0x7a026bf79b36580bf7ef174711a3de823ff3c93c65304c3acc0323c77d62d0ed
-PolyNetwork Exploiter sent DAI
+PolyNetwork Exploiter returns stolen DAI
 
 // // // //
 0x814e6a21c8eb34b62a05c1d0b14ee932873c62ef3c8575dc49bcf12004714eda
-PolyNetwork Exploiter sent ETH
+PolyNetwork Exploiter received ETH as "bug bounty"
 
 What is the largest account balance you can find ? ->
 

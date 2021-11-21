@@ -1,0 +1,18 @@
+.App {
+  margin: 15px;
+}
+
+.block {
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+.button {
+  margin-top: 4px;
+  width: 100px;
+}
+
+.text {
+  margin-top: 10px;
+}

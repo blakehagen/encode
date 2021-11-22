@@ -1,5 +1,6 @@
 const express = require('express');
 const IPFS = require('ipfs');
+const all = require('it-all');
 
 const app = express();
 const port = 3001;
@@ -20,11 +21,21 @@ app.get('/', (req, res) => {
   res.json({ message: "Hello from server!" });
 })
 
-app.post('/save-text', async (req, res) => {
+app.post('/save', async (req, res) => {
   const { text } = req.body;
   try {
     const cid = await node.add(text);
     return res.status(200).json({ success: true, cid: cid.path })
+  } catch {
+    return res.status(400).send('oops. something went wrong.');
+  }
+})
+
+app.get('/retrieve/:cid', async (req, res) => {
+  const { cid } = req.params;
+  try {
+    const data = Buffer.concat(await all(node.cat(cid)));
+    return res.status(200).json({ success: true, text: data.toString() })
   } catch {
     return res.status(400).send('oops. something went wrong.');
   }

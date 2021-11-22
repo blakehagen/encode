@@ -1,16 +1,21 @@
 .App {
-  margin: 15px;
+  margin: 20px;
 }
 
 .block {
   max-width: 500px;
   display: flex;
   flex-direction: column;
+  margin-top: 30px;
 }
 
 .button {
   margin-top: 4px;
   width: 100px;
+}
+
+.button-clear {
+  margin-top: 40px;
 }
 
 .text {

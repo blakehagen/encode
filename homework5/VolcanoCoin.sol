@@ -7,26 +7,36 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 
 contract VolcanoCoin is Ownable, ERC20 {
+    uint256  constant initialSupply = 10000;
+
     constructor() ERC20("VolcanoCoin", "VLC") {
-        _mint(msg.sender, 10000);
+        _mint(msg.sender, initialSupply);
     }
 
     struct Payment {
-        address sender;
+        uint256 amount;
         address recipient;
-        uint amount;
     }
 
-    Payment[] public payments;
+    mapping (address => Payment[]) public payments;
+    event supplyChanged(uint256);
 
-
-    function mintTokensToOwner() public onlyOwner {
-        _mint(msg.sender, 10000);
+    function transfer(address _recipient, uint256 _amount) public virtual override returns (bool) {
+        _transfer(msg.sender, _recipient, _amount);
+        addPaymentRecord(msg.sender, _recipient, _amount);
+        return true;
     }
 
-    function addPaymentRecord(address _sender, address _recipient, uint _amt) public {
-        Payment memory newPayment = Payment(_sender, _recipient, _amt);
-        payments.push(newPayment);
+    function addPaymentRecord(address _sender, address _recipient, uint256 _amount) internal {
+        payments[_sender].push(Payment(_amount,_recipient ));
+    }
 
+    function getPayments(address _user) public view returns (Payment[] memory) {
+        return payments[_user];
+    }
+
+    function addToTotalSupply(uint256 _quantity) public onlyOwner {
+        _mint(msg.sender,_quantity);
+        emit supplyChanged(_quantity);
     }
 }

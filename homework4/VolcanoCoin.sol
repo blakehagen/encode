@@ -3,20 +3,15 @@
 pragma solidity ^0.8.0;
 
 contract VolcanoCoin {
-    uint totalSupply;
+    uint256 public totalSupply;
     address owner;
+
+    mapping(address => uint) public balances;
+    mapping(address => Payment[]) public payments;
 
     struct Payment {
         address recipient;
-        uint amount;
-    }
-
-    // Payment[] public payments;
-
-    constructor() {
-        totalSupply = 10000;
-        owner = msg.sender;
-        balance[owner] = totalSupply;
+        uint256 amount;
     }
 
     modifier onlyOwner {
@@ -25,26 +20,33 @@ contract VolcanoCoin {
         }
     }
 
-    event TotalSupplyIncrease(uint indexed);
-    event Transfer(address, uint indexed);
+    event supplyChanged(uint indexed);
+    event Transfer(address indexed, uint256);
 
-
-    mapping(address => uint) public balance;
-    // mapping(address => Payment[]) public paymentRecords; TODO => how to create an array of structs as the value of a mapping
-
-
-    function getTotalSupply() public view returns (uint) {
-        return totalSupply;
+    constructor() {
+        totalSupply = 10000;
+        owner = msg.sender;
+        balances[msg.sender] = totalSupply;
     }
 
-    function tranfser(uint _amt, address _recipient) public {
-        if(balance[msg.sender] >= _amt) {
-            balance[_recipient] += _amt;
-            balance[msg.sender] = balance[msg.sender] - _amt;
-            emit Transfer(_recipient, balance[_recipient]);
-            // paymentRecords[msg.sender].push(Payment(_recipient, _amt)); TODO => how to add a Payment to the `paymentRecords` mapping when a transfer is made
-        } else {
-            require(balance[msg.sender] >= _amt,"Insufficient balance to make transfer.");
-        }
+    function updateTotalSupply() public onlyOwner {
+        totalSupply = totalSupply + 1000;
+        emit supplyChanged(totalSupply);
+    }
+
+    function transfer(address _recipient, uint256 _amt) public {
+        require(balances[msg.sender] >= _amt,"Insufficient balance to make transfer.");
+        balances[msg.sender] -= _amt;
+        balances[_recipient] += _amt;
+        emit Transfer(_recipient, _amt);
+
+        Payment memory payment;
+        payment.recipient = _recipient;
+        payment.amount = _amt;
+        payments[msg.sender].push(payment);
+    }
+
+    function getPayments(address _user) public view returns (Payment[] memory) {
+        return payments[_user];
     }
 }
